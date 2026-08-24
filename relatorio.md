@@ -119,6 +119,8 @@ make test
 | 6 | S1 | Bloco 6: pipe com N-1 pipes, fechando todos os fds no pai e nos filhos | OK — mesma contagem do bash, sem travamento | | 24/08 08:16 | log 08:16:31 |
 | 7 | S1 | Bloco 7: start/jobs/wait com coleta WNOHANG antes de cada prompt | OK — `ps -el \| grep defunct` vazio com job já concluído | | 24/08 08:17 | log 08:17:32 |
 | 8 | S1 | Validação final: `make clean && make && make test` com os seis `.pf` | OK — todos com status 0 | | 24/08 08:18 | log 08:18:18 |
+| 9 | S1 | `make check` com golden files: 1ª geração saiu com linhas fora de ordem | Falha: linhas ecoadas do workflow apareciam depois da saída dos filhos | stdout redirecionado usa buffer de bloco; filhos e stderr não passam por ele | 24/08 09:10 | log 09:10:34 |
+| 10 | S1 | `fflush(stdout)` após ecoar a linha no modo workflow; regenerar esperados | OK — `make check` passa 2x seguidas (idempotente) | | 24/08 09:10 | log 09:10:34 |
 
 ---
 
@@ -187,4 +189,4 @@ A decisão de manter tudo em um arquivo com vetores fixos acelerou muito o ciclo
 
 ## 10. Se eu tivesse mais 2 horas
 
-Trocaria o buffer fixo de linha por `getline` para aceitar linhas de qualquer tamanho. Adicionaria um `make check` que compara a saída de cada `.pf` com um arquivo `.esperado` via `diff`, transformando os testes em pass/fail automáticos. Rodaria `valgrind --leak-check=full` para confirmar que a redefinição de tarefas não vaza memória. Implementaria `wait` sem argumento (espera todos os jobs) e suporte a argumentos com aspas no parser. Por fim, um `exit` que avisa quantos jobs de background ainda estão rodando antes de encerrar.
+Trocaria o buffer fixo de linha por `getline` para aceitar linhas de qualquer tamanho. Rodaria `valgrind --leak-check=full` para confirmar que a redefinição de tarefas não vaza memória. Implementaria `wait` sem argumento (espera todos os jobs) e suporte a argumentos com aspas no parser. Por fim, um `exit` que avisa quantos jobs de background ainda estão rodando antes de encerrar. (O `make check` com golden files, que estava nesta lista, acabou entrando na entrega — diário #9 e #10 — e de quebra revelou um bug real de buffering no eco do modo workflow.)

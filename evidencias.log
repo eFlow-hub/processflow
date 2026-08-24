@@ -237,3 +237,24 @@ terminou-sem-exit
 status final do make test: 0
 
 Script done on 2026-08-24 08:18:21-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 09:10:34-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao8_inner.sh" <not executed on terminal>]
+Mon Aug 24 09:10:34 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+--- bug de ordem: saida do workflow redirecionada antes do fflush ---
+(linhas ecoadas saiam depois da saida dos filhos; corrigido com fflush(stdout))
+gcc -Wall -Wextra -g -o processflow processflow.c
+--- make check (1a vez) ---
+OK: t2_grupos
+OK: t3_redir
+OK: t5_erros
+OK: t6_sem_exit
+status: 0
+--- make check (2a vez, idempotencia) ---
+OK: t2_grupos
+OK: t3_redir
+OK: t5_erros
+OK: t6_sem_exit
+status: 0
+
+Script done on 2026-08-24 09:10:43-03:00 [COMMAND_EXIT_CODE="0"]

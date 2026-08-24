@@ -14,4 +14,7 @@ test: processflow
 		echo "===== fim $$f (status $$?) ====="; \
 	done
 
-.PHONY: clean test
+check: processflow
+	@bash testes/check.sh
+
+.PHONY: clean test check

@@ -414,6 +414,9 @@ int main(int argc, char *argv[]) {
             fputs(line, stdout); /* imprime a linha antes de processar */
             if (line[strlen(line) - 1] != '\n')
                 putchar('\n');
+            /* com stdout redirecionado o buffer e de bloco: sem flush a
+             * linha ecoada sairia depois da saida dos filhos */
+            fflush(stdout);
         }
         if (process_line(line))
             break;

@@ -1,0 +1,28 @@
+run naoexiste
+run: tarefa 'naoexiste' nao existe
+task ruim /bin/programa_que_nao_existe
+run ruim
+processflow: nao foi possivel executar '/bin/programa_que_nao_existe': No such file or directory
+tarefa 'ruim' terminou com codigo 127
+task ordenar /usr/bin/sort
+input ordenar /caminho/inexistente.txt
+run ordenar
+input: /caminho/inexistente.txt: No such file or directory
+tarefa 'ordenar' terminou com codigo 1
+wait 99
+wait: job 99 nao existe
+workdir /pasta/que/nao/existe
+workdir: /pasta/que/nao/existe: No such file or directory
+run
+uso: run <nome> | run sequential|parallel|pipe <tarefas...>
+task
+uso: task <nome> <programa> [args...]
+input ordenar
+uso: input <tarefa> <arquivo>
+comando_invalido abc
+comando desconhecido: comando_invalido
+
+task sobrevivente /bin/echo ainda-vivo
+run sobrevivente
+ainda-vivo
+exit
