@@ -183,18 +183,77 @@ static void run_group(char **names, int n, int paralelo) {
     }
 }
 
-/* run <nome> | run sequential <t...> | run parallel <t...> */
+/* run pipe t1 t2 t3: N tarefas, N-1 pipes; stdout de uma vira stdin da proxima */
+static void run_pipe(char **names, int n) {
+    Task *ts[MAX_ARGS];
+    for (int i = 0; i < n; i++) {
+        ts[i] = find_task(names[i]);
+        if (ts[i] == NULL) {
+            fprintf(stderr, "run: tarefa '%s' nao existe\n", names[i]);
+            return; /* pipe incompleto nao faz sentido: aborta o grupo */
+        }
+    }
+    int pipes[MAX_ARGS - 1][2];
+    for (int i = 0; i < n - 1; i++) {
+        if (pipe(pipes[i]) < 0) {
+            perror("pipe");
+            for (int j = 0; j < i; j++) {
+                close(pipes[j][0]);
+                close(pipes[j][1]);
+            }
+            return;
+        }
+    }
+    pid_t pids[MAX_ARGS];
+    for (int i = 0; i < n; i++) {
+        pids[i] = fork();
+        if (pids[i] < 0) {
+            perror("fork");
+            continue;
+        }
+        if (pids[i] == 0) {
+            if (i > 0)
+                dup2(pipes[i - 1][0], STDIN_FILENO);
+            if (i < n - 1)
+                dup2(pipes[i][1], STDOUT_FILENO);
+            /* fecha todos os descritores originais: ponta de escrita
+             * esquecida aberta = leitor nunca ve EOF e trava */
+            for (int j = 0; j < n - 1; j++) {
+                close(pipes[j][0]);
+                close(pipes[j][1]);
+            }
+            child_exec(ts[i]);
+        }
+    }
+    for (int j = 0; j < n - 1; j++) {
+        close(pipes[j][0]);
+        close(pipes[j][1]);
+    }
+    for (int i = 0; i < n; i++) {
+        if (pids[i] <= 0)
+            continue;
+        int status;
+        waitpid(pids[i], &status, 0);
+        report_status(names[i], status);
+    }
+}
+
+/* run <nome> | run sequential|parallel|pipe <tarefas...> */
 static void cmd_run(char **tok, int n) {
     if (n < 2) {
-        fprintf(stderr, "uso: run <nome> | run sequential|parallel <tarefas...>\n");
+        fprintf(stderr, "uso: run <nome> | run sequential|parallel|pipe <tarefas...>\n");
         return;
     }
-    if (strcmp(tok[1], "sequential") == 0 || strcmp(tok[1], "parallel") == 0) {
+    if (strcmp(tok[1], "sequential") == 0 || strcmp(tok[1], "parallel") == 0 ||
+        strcmp(tok[1], "pipe") == 0) {
         if (n < 3) {
             fprintf(stderr, "uso: run %s <tarefa1> [tarefa2...]\n", tok[1]);
             return;
         }
-        run_group(tok + 2, n - 2, strcmp(tok[1], "parallel") == 0);
+        if (strcmp(tok[1], "pipe") == 0)
+            run_pipe(tok + 2, n - 2);
+        else
+            run_group(tok + 2, n - 2, strcmp(tok[1], "parallel") == 0);
         return;
     }
     run_one(tok[1]);
