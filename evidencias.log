@@ -258,3 +258,18 @@ OK: t6_sem_exit
 status: 0
 
 Script done on 2026-08-24 09:10:43-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 09:51:53-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao9_inner.sh" <not executed on terminal>]
+Mon Aug 24 09:51:53 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+--- experimento didatico 1: return vs _exit apos exec falho ---
+antes do fork (aparece 1x)
+filho: exec falhou (No such file or directory) e eu NAO vou chamar _exit
+fim do main (deveria aparecer 1x... aparece 2x!)
+fim do main (deveria aparecer 1x... aparece 2x!)
+--- confirmacao no processflow (usa _exit): mensagem final NAO duplica ---
+processflow> processflow> processflow: nao foi possivel executar '/bin/programa_que_nao_existe': No such file or directory
+tarefa 'ruim' terminou com codigo 127
+processflow> processflow> so-uma-vez
+processflow> 
+Script done on 2026-08-24 09:51:53-03:00 [COMMAND_EXIT_CODE="0"]

@@ -121,6 +121,7 @@ make test
 | 8 | S1 | Validação final: `make clean && make && make test` com os seis `.pf` | OK — todos com status 0 | | 24/08 08:18 | log 08:18:18 |
 | 9 | S1 | `make check` com golden files: 1ª geração saiu com linhas fora de ordem | Falha: linhas ecoadas do workflow apareciam depois da saída dos filhos | stdout redirecionado usa buffer de bloco; filhos e stderr não passam por ele | 24/08 09:10 | log 09:10:34 |
 | 10 | S1 | `fflush(stdout)` após ecoar a linha no modo workflow; regenerar esperados | OK — `make check` passa 2x seguidas (idempotente) | | 24/08 09:10 | log 09:10:34 |
+| 11 | S1 | Experimento didático (`experimentos/exp1`): reproduzi de propósito o filho que dá `return` em vez de `_exit` após exec falho | Falha esperada e confirmada: mensagem final do main duplicada — filho sobrevive executando o código do pai; no processflow, `_exit(127)` evita isso | Filho pós-exec-falho continua no código do pai; `return` o faz voltar pelo fluxo normal | 24/08 09:51 | log 09:51:53 |
 
 ---
 
