@@ -26,6 +26,18 @@ typedef struct {
 static Task tasks[MAX_TASKS];
 static int ntasks = 0;
 
+#define MAX_JOBS 64
+
+typedef struct {
+    int id;
+    pid_t pid;
+    char taskname[64];
+    int ativo; /* 1 enquanto o processo nao foi colhido */
+} Job;
+
+static Job jobs[MAX_JOBS];
+static int njobs = 0;
+
 static Task *find_task(const char *name) {
     for (int i = 0; i < ntasks; i++)
         if (strcmp(tasks[i].name, name) == 0)
@@ -259,6 +271,82 @@ static void cmd_run(char **tok, int n) {
     run_one(tok[1]);
 }
 
+/* colhe jobs terminados sem bloquear: evita zumbis na tabela de processos */
+static void reap_jobs(void) {
+    for (int i = 0; i < njobs; i++) {
+        if (!jobs[i].ativo)
+            continue;
+        int status;
+        pid_t r = waitpid(jobs[i].pid, &status, WNOHANG);
+        if (r == jobs[i].pid) {
+            jobs[i].ativo = 0;
+            printf("[%d] concluido: %s\n", jobs[i].id, jobs[i].taskname);
+            report_status(jobs[i].taskname, status);
+        }
+    }
+}
+
+/* start <tarefa>: executa em background e registra na tabela de jobs */
+static void cmd_start(char **tok, int n) {
+    if (n != 2) {
+        fprintf(stderr, "uso: start <tarefa>\n");
+        return;
+    }
+    Task *t = find_task(tok[1]);
+    if (t == NULL) {
+        fprintf(stderr, "start: tarefa '%s' nao existe\n", tok[1]);
+        return;
+    }
+    if (njobs == MAX_JOBS) {
+        fprintf(stderr, "start: limite de %d jobs atingido\n", MAX_JOBS);
+        return;
+    }
+    pid_t pid = fork();
+    if (pid < 0) {
+        perror("fork");
+        return;
+    }
+    if (pid == 0)
+        child_exec(t);
+    Job *j = &jobs[njobs++];
+    j->id = njobs;
+    j->pid = pid;
+    snprintf(j->taskname, sizeof(j->taskname), "%s", tok[1]);
+    j->ativo = 1;
+    printf("[%d] %d\n", j->id, pid);
+}
+
+static void cmd_jobs(void) {
+    reap_jobs();
+    for (int i = 0; i < njobs; i++)
+        if (jobs[i].ativo)
+            printf("[%d] %d %s\n", jobs[i].id, jobs[i].pid, jobs[i].taskname);
+}
+
+/* wait <jobId>: bloqueia ate o job terminar */
+static void cmd_wait(char **tok, int n) {
+    if (n != 2) {
+        fprintf(stderr, "uso: wait <jobId>\n");
+        return;
+    }
+    int id = atoi(tok[1]);
+    for (int i = 0; i < njobs; i++) {
+        if (jobs[i].id == id) {
+            if (!jobs[i].ativo) {
+                printf("[%d] ja concluido\n", id);
+                return;
+            }
+            int status;
+            waitpid(jobs[i].pid, &status, 0);
+            jobs[i].ativo = 0;
+            printf("[%d] concluido: %s\n", jobs[i].id, jobs[i].taskname);
+            report_status(jobs[i].taskname, status);
+            return;
+        }
+    }
+    fprintf(stderr, "wait: job %s nao existe\n", tok[1]);
+}
+
 /* retorna 1 quando a linha pede o encerramento (exit) */
 static int process_line(char *line) {
     char *tok[MAX_ARGS + 4];
@@ -279,6 +367,12 @@ static int process_line(char *line) {
     else if (strcmp(tok[0], "input") == 0 || strcmp(tok[0], "output") == 0 ||
              strcmp(tok[0], "append") == 0)
         cmd_redirect(tok, n);
+    else if (strcmp(tok[0], "start") == 0)
+        cmd_start(tok, n);
+    else if (strcmp(tok[0], "jobs") == 0)
+        cmd_jobs();
+    else if (strcmp(tok[0], "wait") == 0)
+        cmd_wait(tok, n);
     else if (strcmp(tok[0], "workdir") == 0) {
         if (n != 2)
             fprintf(stderr, "uso: workdir <diretorio>\n");
@@ -309,6 +403,7 @@ int main(int argc, char *argv[]) {
 
     char line[MAX_LINE];
     for (;;) {
+        reap_jobs(); /* colhe background terminado antes de cada linha */
         if (interativo) {
             printf("processflow> ");
             fflush(stdout);

@@ -120,3 +120,21 @@ processflow> processflow> sobrevivi
 processflow> status: 0
 
 Script done on 2026-08-24 08:16:32-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 08:17:32-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao6_inner.sh" <not executed on terminal>]
+Mon Aug 24 08:17:32 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+gcc -Wall -Wextra -g -o processflow processflow.c
+--- start/jobs/wait ---
+processflow> processflow> processflow> [1] 433
+processflow> [2] 434
+processflow> oi-background
+[1] concluido: rapido
+[2] 434 lento
+processflow> verificacao de zumbis (fora do processflow):
+nenhum processo zumbi encontrado
+[2] concluido: lento
+processflow> wait: job 99 nao existe
+processflow> processflow> status: 0
+
+Script done on 2026-08-24 08:17:36-03:00 [COMMAND_EXIT_CODE="0"]
