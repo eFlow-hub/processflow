@@ -382,3 +382,42 @@ processflow> processflow> processflow> processflow> processflow> processflow> pr
 processflow> status: 0 (0 = sem vazamento na redefinicao)
 
 Script done on 2026-08-24 16:35:20-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 19:09:42-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao14_inner.sh" <not executed on terminal>]
+Mon Aug 24 19:09:42 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+gcc -Wall -Wextra -g -o processflow processflow.c
+--- wait sem argumento: espera os 3 jobs (esperado ~2s, o mais longo) ---
+task s1 /bin/sleep 1
+task s2 /bin/sleep 2
+task eco /bin/echo background-ok
+start s1
+[1] 12751
+start s2
+[2] 12752
+start eco
+[3] 12753
+jobs
+[1] 12751 s1
+[2] 12752 s2
+[3] 12753 eco
+wait
+background-ok
+[1] concluido: s1
+[2] concluido: s2
+[3] concluido: eco
+jobs
+exit
+
+real	0m2.051s
+user	0m0.005s
+sys	0m0.018s
+status: 0
+--- regressao: make check continua passando ---
+OK: t2_grupos
+OK: t3_redir
+OK: t5_erros
+OK: t6_sem_exit
+status: 0
+
+Script done on 2026-08-24 19:09:49-03:00 [COMMAND_EXIT_CODE="0"]

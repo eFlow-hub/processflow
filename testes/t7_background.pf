@@ -1,0 +1,10 @@
+task s1 /bin/sleep 1
+task s2 /bin/sleep 2
+task eco /bin/echo background-ok
+start s1
+start s2
+start eco
+jobs
+wait
+jobs
+exit

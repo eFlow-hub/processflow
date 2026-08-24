@@ -63,6 +63,6 @@ input|output|append <tarefa> <arquivo>
 workdir <diretório>                muda o diretório corrente
 start <tarefa>                     executa em background ([id] PID)
 jobs                               lista jobs ativos
-wait <jobId>                       espera um job
+wait [jobId]                       espera um job (sem argumento: todos)
 exit                               encerra (CTRL-D também encerra)
 ```

@@ -323,10 +323,22 @@ static void cmd_jobs(void) {
             printf("[%d] %d %s\n", jobs[i].id, jobs[i].pid, jobs[i].taskname);
 }
 
-/* wait <jobId>: bloqueia ate o job terminar */
+/* wait: espera todos os jobs ativos; wait <jobId>: bloqueia ate o job terminar */
 static void cmd_wait(char **tok, int n) {
+    if (n == 1) {
+        for (int i = 0; i < njobs; i++) {
+            if (!jobs[i].ativo)
+                continue;
+            int status;
+            waitpid(jobs[i].pid, &status, 0);
+            jobs[i].ativo = 0;
+            printf("[%d] concluido: %s\n", jobs[i].id, jobs[i].taskname);
+            report_status(jobs[i].taskname, status);
+        }
+        return;
+    }
     if (n != 2) {
-        fprintf(stderr, "uso: wait <jobId>\n");
+        fprintf(stderr, "uso: wait [jobId]\n");
         return;
     }
     int id = atoi(tok[1]);
