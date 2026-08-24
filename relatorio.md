@@ -1,8 +1,8 @@
 # Relatório — Infraestrutura de Software
 ## Implementação 1: ProcessFlow
 
-**Aluno:** (preencher)
-**E-mail:** agenciaeflow@gmail.com
+**Aluno:** Mateus Reinaux Batista Meira
+**E-mail:** mrbm@cesar.school
 **Data:** 24/08/2026
 **Sistema operacional utilizado:** Windows 11 + WSL2 (Ubuntu, gcc 15.2)
 **Link do GitHub:** https://github.com/eFlow-hub/processflow (privado)
