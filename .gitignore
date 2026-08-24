@@ -1,0 +1,4 @@
+processflow
+*.o
+resultado.txt
+saida*.txt
