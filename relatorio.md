@@ -123,6 +123,7 @@ make test
 | 10 | S1 | `fflush(stdout)` após ecoar a linha no modo workflow; regenerar esperados | OK — `make check` passa 2x seguidas (idempotente) | | 24/08 09:10 | log 09:10:34 |
 | 11 | S1 | Experimento didático (`experimentos/exp1`): reproduzi de propósito o filho que dá `return` em vez de `_exit` após exec falho | Falha esperada e confirmada: mensagem final do main duplicada — filho sobrevive executando o código do pai; no processflow, `_exit(127)` evita isso | Filho pós-exec-falho continua no código do pai; `return` o faz voltar pelo fluxo normal | 24/08 09:51 | log 09:51:53 |
 | 12 | S1 | Experimento didático (`experimentos/exp2`): `open` com `O_CREAT` omitindo o 3º argumento, em /tmp (ext4) | Falha esperada e confirmada: arquivo nasceu com modo lixo 0011 (`------x--x`) — dono sem permissão de leitura; com 0644 explícito, `-rw-r--r--`. O `output` do processflow cria 0644 correto | `open` é variádico: sem `O_CREAT` o modo é ignorado; com ele, lê lixo da pilha se omitido | 24/08 10:21 | log 10:21:34 |
+| 13 | S1 | Experimento didático (`experimentos/exp3`): pai escreve no pipe e não fecha `p[1]` antes do `waitpid` | Falha esperada e confirmada: `wc -l` nunca recebe EOF e o programa fica pendurado sem erro — `timeout 3` mata com status 124; no modo certo (`close(p[1])`) imprime 3 e termina. `run pipe` do processflow finaliza sob `timeout 10` | EOF no pipe só chega quando todas as cópias da ponta de escrita fecham; fork duplica descritores | 24/08 12:20 | log 12:20:01 |
 
 ---
 

@@ -290,3 +290,25 @@ permissoes resultantes (esperado: errado = lixo, certo = 0644):
 -rw-r--r-- 1 pc pc 8 Aug 24 10:21 /tmp/exp2_pf.txt
 
 Script done on 2026-08-24 10:21:34-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 12:20:01-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao11_inner.sh" <not executed on terminal>]
+Mon Aug 24 12:20:01 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+--- experimento didatico 3: pipe sem close trava ---
+-> modo errado sob timeout 3:
+modo errado: pai mantem p[1] aberto... vou travar
+status do timeout: 124 (124 = matou por travamento)
+-> modo certo:
+3
+terminou (so aparece no modo certo)
+status: 0
+--- confirmacao: run pipe do processflow nao trava (sob timeout 10) ---
+task listar /bin/ls -l
+task ordenar /usr/bin/sort
+task contar /usr/bin/wc -l
+run pipe listar ordenar contar
+10
+exit
+status: 0
+
+Script done on 2026-08-24 12:20:06-03:00 [COMMAND_EXIT_CODE="0"]
