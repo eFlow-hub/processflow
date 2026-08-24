@@ -273,3 +273,20 @@ tarefa 'ruim' terminou com codigo 127
 processflow> processflow> so-uma-vez
 processflow> 
 Script done on 2026-08-24 09:51:53-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 10:21:34-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao10_inner.sh" <not executed on terminal>]
+Mon Aug 24 10:21:34 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+--- experimento didatico 2: O_CREAT sem modo (roda 2x) ---
+permissoes resultantes (esperado: errado = lixo, certo = 0644):
+/tmp/exp2_errado.txt -> modo 0011
+/tmp/exp2_certo.txt -> modo 0644
+permissoes resultantes (esperado: errado = lixo, certo = 0644):
+/tmp/exp2_errado.txt -> modo 0011
+/tmp/exp2_certo.txt -> modo 0644
+-rw-r--r-- 1 pc pc 0 Aug 24 10:21 /tmp/exp2_certo.txt
+------x--x 1 pc pc 0 Aug 24 10:21 /tmp/exp2_errado.txt
+--- confirmacao no processflow: output cria arquivo 0644 ---
+-rw-r--r-- 1 pc pc 8 Aug 24 10:21 /tmp/exp2_pf.txt
+
+Script done on 2026-08-24 10:21:34-03:00 [COMMAND_EXIT_CODE="0"]
