@@ -7,6 +7,7 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -17,6 +18,9 @@
 typedef struct {
     char name[64];
     char *argv[MAX_ARGS + 1]; /* argv[0] = programa, termina em NULL */
+    char *infile;             /* redirecionamento de entrada (ou NULL) */
+    char *outfile;            /* redirecionamento de saida (ou NULL) */
+    int append;               /* 0 = output (trunca), 1 = append */
 } Task;
 
 static Task tasks[MAX_TASKS];
@@ -33,6 +37,10 @@ static void free_task_argv(Task *t) {
     for (int i = 0; t->argv[i] != NULL; i++)
         free(t->argv[i]);
     t->argv[0] = NULL;
+    free(t->infile);
+    free(t->outfile);
+    t->infile = t->outfile = NULL;
+    t->append = 0;
 }
 
 /* task <nome> <programa> [args...] */
@@ -62,8 +70,33 @@ static void cmd_task(char **tok, int n) {
     t->argv[i - 2] = NULL;
 }
 
+/* aplica os redirecionamentos registrados; em caso de falha o filho
+ * sai sem executar o programa */
+static void setup_redirects(Task *t) {
+    if (t->infile != NULL) {
+        int fd = open(t->infile, O_RDONLY);
+        if (fd < 0) {
+            fprintf(stderr, "input: %s: %s\n", t->infile, strerror(errno));
+            _exit(1);
+        }
+        dup2(fd, STDIN_FILENO);
+        close(fd);
+    }
+    if (t->outfile != NULL) {
+        int flags = O_WRONLY | O_CREAT | (t->append ? O_APPEND : O_TRUNC);
+        int fd = open(t->outfile, flags, 0644);
+        if (fd < 0) {
+            fprintf(stderr, "output: %s: %s\n", t->outfile, strerror(errno));
+            _exit(1);
+        }
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+    }
+}
+
 /* corpo do filho: nunca retorna */
 static void child_exec(Task *t) {
+    setup_redirects(t);
     execvp(t->argv[0], t->argv);
     fprintf(stderr, "processflow: nao foi possivel executar '%s': %s\n",
             t->argv[0], strerror(errno));
@@ -94,6 +127,27 @@ static void run_one(const char *name) {
     int status;
     waitpid(pid, &status, 0);
     report_status(name, status);
+}
+
+/* input|output|append <tarefa> <arquivo>: so registra; quem aplica e o run */
+static void cmd_redirect(char **tok, int n) {
+    if (n != 3) {
+        fprintf(stderr, "uso: %s <tarefa> <arquivo>\n", tok[0]);
+        return;
+    }
+    Task *t = find_task(tok[1]);
+    if (t == NULL) {
+        fprintf(stderr, "%s: tarefa '%s' nao existe\n", tok[0], tok[1]);
+        return;
+    }
+    if (strcmp(tok[0], "input") == 0) {
+        free(t->infile);
+        t->infile = strdup(tok[2]);
+    } else {
+        free(t->outfile);
+        t->outfile = strdup(tok[2]);
+        t->append = (strcmp(tok[0], "append") == 0);
+    }
 }
 
 /* sequencial: fork+wait um a um; paralelo: fork todos, depois wait todos */
@@ -163,6 +217,9 @@ static int process_line(char *line) {
         cmd_task(tok, n);
     else if (strcmp(tok[0], "run") == 0)
         cmd_run(tok, n);
+    else if (strcmp(tok[0], "input") == 0 || strcmp(tok[0], "output") == 0 ||
+             strcmp(tok[0], "append") == 0)
+        cmd_redirect(tok, n);
     else if (strcmp(tok[0], "workdir") == 0) {
         if (n != 2)
             fprintf(stderr, "uso: workdir <diretorio>\n");

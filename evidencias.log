@@ -60,3 +60,43 @@ processflow> workdir: /pasta/inexistente: No such file or directory
 processflow> status: 0
 
 Script done on 2026-08-24 08:14:49-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 08:15:46-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao4_inner.sh" <not executed on terminal>]
+Mon Aug 24 08:15:46 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+gcc -Wall -Wextra -g -o processflow processflow.c
+--- t3_redir.pf ---
+task ordenar /usr/bin/sort
+input ordenar testes/nomes.txt
+output ordenar resultado.txt
+run ordenar
+task mostrar /bin/cat resultado.txt
+run mostrar
+ana
+bruno
+carla
+daniel
+task ecoa /bin/echo linha-extra
+append ecoa resultado.txt
+run ecoa
+run ecoa
+run mostrar
+ana
+bruno
+carla
+daniel
+linha-extra
+linha-extra
+exit
+--- conferencia: sort direto no bash ---
+ana
+bruno
+carla
+daniel
+--- input inexistente (deve continuar) ---
+processflow> processflow> processflow> input: /caminho/inexistente.txt: No such file or directory
+tarefa 'ordenar' terminou com codigo 1
+processflow> processflow> sobrevivi
+processflow> status: 0
+
+Script done on 2026-08-24 08:15:46-03:00 [COMMAND_EXIT_CODE="0"]

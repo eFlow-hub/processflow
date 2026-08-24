@@ -1,0 +1,12 @@
+task ordenar /usr/bin/sort
+input ordenar testes/nomes.txt
+output ordenar resultado.txt
+run ordenar
+task mostrar /bin/cat resultado.txt
+run mostrar
+task ecoa /bin/echo linha-extra
+append ecoa resultado.txt
+run ecoa
+run ecoa
+run mostrar
+exit
