@@ -358,3 +358,27 @@ processflow> == ps depois do jobs (coletado, esperado nenhum):
    (nenhum)
 
 Script done on 2026-08-24 12:34:23-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 16:35:19-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao13_inner.sh" <not executed on terminal>]
+Mon Aug 24 16:35:19 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+--- experimento didatico 5: vazamento proposital sob LeakSanitizer ---
+nome atual: segundo (o bloco de "primeiro" ficou orfao)
+
+=================================================================
+[1m[31m==430==ERROR: LeakSanitizer: detected memory leaks
+[1m[0m
+[1m[34mDirect leak of 9 byte(s) in 1 object(s) allocated from:
+[1m[0m    #0 0x7e21ef92478c in strdup ../../../../src/libsanitizer/asan/asan_interceptors.cpp:617
+    #1 0x6361407dd223 in main (/tmp/exp5+0x1223) (BuildId: 6931ad0102aa4e4c602df33a03976bf0e360c483)
+    #2 0x7e21ef42a600  (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a600) (BuildId: 240c8909736b31f963346aca80667fd00c551e32)
+    #3 0x7e21ef42a717 in __libc_start_main (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a717) (BuildId: 240c8909736b31f963346aca80667fd00c551e32)
+    #4 0x6361407dd144 in _start (/tmp/exp5+0x1144) (BuildId: 6931ad0102aa4e4c602df33a03976bf0e360c483)
+
+SUMMARY: AddressSanitizer: 9 byte(s) leaked in 1 allocation(s).
+status: 1 (diferente de 0 = LSan achou leak)
+--- processflow com ASan: estresse de redefinicao de tarefas ---
+processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> processflow> versao-final
+processflow> status: 0 (0 = sem vazamento na redefinicao)
+
+Script done on 2026-08-24 16:35:20-03:00 [COMMAND_EXIT_CODE="0"]
