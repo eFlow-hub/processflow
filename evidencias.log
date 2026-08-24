@@ -13,3 +13,22 @@ processflow> run: tarefa 'naoexiste' nao existe
 processflow> processflow> processflow> status final: 0
 
 Script done on 2026-08-24 08:12:54-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 08:14:01-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao2_inner.sh" <not executed on terminal>]
+Mon Aug 24 08:14:01 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+gcc -Wall -Wextra -g -o processflow processflow.c
+--- sequencial (esperado ~3s) ---
+processflow> processflow> processflow> processflow> fim
+processflow> 
+real	0m3.020s
+user	0m0.007s
+sys	0m0.000s
+--- paralelo (esperado ~2s) ---
+processflow> processflow> processflow> processflow> fim
+processflow> 
+real	0m2.006s
+user	0m0.006s
+sys	0m0.000s
+
+Script done on 2026-08-24 08:14:07-03:00 [COMMAND_EXIT_CODE="0"]

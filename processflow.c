@@ -96,10 +96,51 @@ static void run_one(const char *name) {
     report_status(name, status);
 }
 
-/* run <nome> */
+/* sequencial: fork+wait um a um; paralelo: fork todos, depois wait todos */
+static void run_group(char **names, int n, int paralelo) {
+    if (!paralelo) {
+        for (int i = 0; i < n; i++)
+            run_one(names[i]);
+        return;
+    }
+    pid_t pids[MAX_ARGS];
+    for (int i = 0; i < n; i++) {
+        Task *t = find_task(names[i]);
+        if (t == NULL) {
+            fprintf(stderr, "run: tarefa '%s' nao existe\n", names[i]);
+            pids[i] = -1;
+            continue;
+        }
+        pids[i] = fork();
+        if (pids[i] < 0) {
+            perror("fork");
+            continue;
+        }
+        if (pids[i] == 0)
+            child_exec(t);
+    }
+    /* espera na ordem de criacao: quem ja terminou e colhido na hora */
+    for (int i = 0; i < n; i++) {
+        if (pids[i] <= 0)
+            continue;
+        int status;
+        waitpid(pids[i], &status, 0);
+        report_status(names[i], status);
+    }
+}
+
+/* run <nome> | run sequential <t...> | run parallel <t...> */
 static void cmd_run(char **tok, int n) {
     if (n < 2) {
-        fprintf(stderr, "uso: run <nome>\n");
+        fprintf(stderr, "uso: run <nome> | run sequential|parallel <tarefas...>\n");
+        return;
+    }
+    if (strcmp(tok[1], "sequential") == 0 || strcmp(tok[1], "parallel") == 0) {
+        if (n < 3) {
+            fprintf(stderr, "uso: run %s <tarefa1> [tarefa2...]\n", tok[1]);
+            return;
+        }
+        run_group(tok + 2, n - 2, strcmp(tok[1], "parallel") == 0);
         return;
     }
     run_one(tok[1]);
