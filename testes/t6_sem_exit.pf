@@ -1,0 +1,2 @@
+task eco /bin/echo terminou-sem-exit
+run eco

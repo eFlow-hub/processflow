@@ -1,0 +1,16 @@
+run naoexiste
+task ruim /bin/programa_que_nao_existe
+run ruim
+task ordenar /usr/bin/sort
+input ordenar /caminho/inexistente.txt
+run ordenar
+wait 99
+workdir /pasta/que/nao/existe
+run
+task
+input ordenar
+comando_invalido abc
+
+task sobrevivente /bin/echo ainda-vivo
+run sobrevivente
+exit

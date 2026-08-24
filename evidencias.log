@@ -138,3 +138,102 @@ processflow> wait: job 99 nao existe
 processflow> processflow> status: 0
 
 Script done on 2026-08-24 08:17:36-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 08:18:18-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao7_inner.sh" <not executed on terminal>]
+Mon Aug 24 08:18:18 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+--- validacao final: make clean && make && make test ---
+rm -f processflow
+gcc -Wall -Wextra -g -o processflow processflow.c
+===== testes/t1_basico.pf =====
+task listar /bin/ls -l
+run listar
+total 56
+-rwxrwxrwx 1 pc pc   286 Aug 24 08:11 Makefile
+-rwxrwxrwx 1 pc pc  1599 Aug 24 08:18 README.md
+-rwxrwxrwx 1 pc pc  6130 Aug 24 08:18 evidencias.log
+-rwxrwxrwx 1 pc pc 30544 Aug 24 08:18 processflow
+-rwxrwxrwx 1 pc pc 12285 Aug 24 08:17 processflow.c
+drwxrwxrwx 1 pc pc   512 Aug 24 08:17 testes
+exit
+===== fim testes/t1_basico.pf (status 0) =====
+===== testes/t2_grupos.pf =====
+task s2 /bin/sleep 2
+task s1 /bin/sleep 1
+task eco /bin/echo grupos-ok
+run sequential s1 eco
+grupos-ok
+run parallel s2 s1 eco
+grupos-ok
+exit
+===== fim testes/t2_grupos.pf (status 0) =====
+===== testes/t3_redir.pf =====
+task ordenar /usr/bin/sort
+input ordenar testes/nomes.txt
+output ordenar resultado.txt
+run ordenar
+task mostrar /bin/cat resultado.txt
+run mostrar
+ana
+bruno
+carla
+daniel
+task ecoa /bin/echo linha-extra
+append ecoa resultado.txt
+run ecoa
+run ecoa
+run mostrar
+ana
+bruno
+carla
+daniel
+linha-extra
+linha-extra
+exit
+===== fim testes/t3_redir.pf (status 0) =====
+===== testes/t4_pipe.pf =====
+task listar /bin/ls -l
+task ordenar /usr/bin/sort
+task contar /usr/bin/wc -l
+run pipe listar ordenar contar
+8
+exit
+===== fim testes/t4_pipe.pf (status 0) =====
+===== testes/t5_erros.pf =====
+run naoexiste
+run: tarefa 'naoexiste' nao existe
+task ruim /bin/programa_que_nao_existe
+run ruim
+processflow: nao foi possivel executar '/bin/programa_que_nao_existe': No such file or directory
+tarefa 'ruim' terminou com codigo 127
+task ordenar /usr/bin/sort
+input ordenar /caminho/inexistente.txt
+run ordenar
+input: /caminho/inexistente.txt: No such file or directory
+tarefa 'ordenar' terminou com codigo 1
+wait 99
+wait: job 99 nao existe
+workdir /pasta/que/nao/existe
+workdir: /pasta/que/nao/existe: No such file or directory
+run
+uso: run <nome> | run sequential|parallel|pipe <tarefas...>
+task
+uso: task <nome> <programa> [args...]
+input ordenar
+uso: input <tarefa> <arquivo>
+comando_invalido abc
+comando desconhecido: comando_invalido
+
+task sobrevivente /bin/echo ainda-vivo
+run sobrevivente
+ainda-vivo
+exit
+===== fim testes/t5_erros.pf (status 0) =====
+===== testes/t6_sem_exit.pf =====
+task eco /bin/echo terminou-sem-exit
+run eco
+terminou-sem-exit
+===== fim testes/t6_sem_exit.pf (status 0) =====
+status final do make test: 0
+
+Script done on 2026-08-24 08:18:21-03:00 [COMMAND_EXIT_CODE="0"]
