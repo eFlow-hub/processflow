@@ -13,7 +13,6 @@
 
 #define MAX_TASKS 64
 #define MAX_ARGS 32
-#define MAX_LINE 1024
 
 typedef struct {
     char name[64];
@@ -413,18 +412,22 @@ int main(int argc, char *argv[]) {
         interativo = 0;
     }
 
-    char line[MAX_LINE];
+    /* getline aloca e cresce o buffer sozinho: linha de qualquer tamanho,
+     * sem a fatia silenciosa do fgets com buffer fixo */
+    char *line = NULL;
+    size_t cap = 0;
     for (;;) {
         reap_jobs(); /* colhe background terminado antes de cada linha */
         if (interativo) {
             printf("processflow> ");
             fflush(stdout);
         }
-        if (fgets(line, sizeof(line), in) == NULL)
+        ssize_t len = getline(&line, &cap, in);
+        if (len < 0)
             break; /* CTRL-D ou fim do workflow: exit implicito */
         if (!interativo) {
             fputs(line, stdout); /* imprime a linha antes de processar */
-            if (line[strlen(line) - 1] != '\n')
+            if (len > 0 && line[len - 1] != '\n')
                 putchar('\n');
             /* com stdout redirecionado o buffer e de bloco: sem flush a
              * linha ecoada sairia depois da saida dos filhos */
@@ -433,6 +436,7 @@ int main(int argc, char *argv[]) {
         if (process_line(line))
             break;
     }
+    free(line);
     if (!interativo)
         fclose(in);
     return 0;
