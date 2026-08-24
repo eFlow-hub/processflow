@@ -32,3 +32,31 @@ user	0m0.006s
 sys	0m0.000s
 
 Script done on 2026-08-24 08:14:07-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 08:14:49-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao3_inner.sh" <not executed on terminal>]
+Mon Aug 24 08:14:49 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+gcc -Wall -Wextra -g -o processflow processflow.c
+--- workflow t1_basico.pf ---
+task listar /bin/ls -l
+run listar
+total 36
+-rwxrwxrwx 1 pc pc   286 Aug 24 08:11 Makefile
+-rwxrwxrwx 1 pc pc  1608 Aug 24 08:14 evidencias.log
+-rwxrwxrwx 1 pc pc 23360 Aug 24 08:14 processflow
+-rwxrwxrwx 1 pc pc  5941 Aug 24 08:14 processflow.c
+drwxrwxrwx 1 pc pc   512 Aug 24 08:14 testes
+exit
+status: 0
+--- argc errado (deve encerrar com erro) ---
+uso: ./processflow [workflow.pf]
+status: 1
+--- workflow inexistente (deve encerrar com erro) ---
+processflow: nao_existe.pf: No such file or directory
+status: 1
+--- workdir ---
+processflow> processflow> processflow> /tmp
+processflow> workdir: /pasta/inexistente: No such file or directory
+processflow> status: 0
+
+Script done on 2026-08-24 08:14:49-03:00 [COMMAND_EXIT_CODE="0"]

@@ -1,0 +1,6 @@
+task s2 /bin/sleep 2
+task s1 /bin/sleep 1
+task eco /bin/echo grupos-ok
+run sequential s1 eco
+run parallel s2 s1 eco
+exit

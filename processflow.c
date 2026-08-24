@@ -163,20 +163,51 @@ static int process_line(char *line) {
         cmd_task(tok, n);
     else if (strcmp(tok[0], "run") == 0)
         cmd_run(tok, n);
+    else if (strcmp(tok[0], "workdir") == 0) {
+        if (n != 2)
+            fprintf(stderr, "uso: workdir <diretorio>\n");
+        else if (chdir(tok[1]) != 0)
+            fprintf(stderr, "workdir: %s: %s\n", tok[1], strerror(errno));
+    }
     else
         fprintf(stderr, "comando desconhecido: %s\n", tok[0]);
     return 0;
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
+    FILE *in = stdin;
+    int interativo = 1;
+
+    if (argc > 2) {
+        fprintf(stderr, "uso: %s [workflow.pf]\n", argv[0]);
+        return 1;
+    }
+    if (argc == 2) {
+        in = fopen(argv[1], "r");
+        if (in == NULL) {
+            fprintf(stderr, "processflow: %s: %s\n", argv[1], strerror(errno));
+            return 1;
+        }
+        interativo = 0;
+    }
+
     char line[MAX_LINE];
     for (;;) {
-        printf("processflow> ");
-        fflush(stdout);
-        if (fgets(line, sizeof(line), stdin) == NULL)
-            break; /* CTRL-D: exit implicito */
+        if (interativo) {
+            printf("processflow> ");
+            fflush(stdout);
+        }
+        if (fgets(line, sizeof(line), in) == NULL)
+            break; /* CTRL-D ou fim do workflow: exit implicito */
+        if (!interativo) {
+            fputs(line, stdout); /* imprime a linha antes de processar */
+            if (line[strlen(line) - 1] != '\n')
+                putchar('\n');
+        }
         if (process_line(line))
             break;
     }
+    if (!interativo)
+        fclose(in);
     return 0;
 }
