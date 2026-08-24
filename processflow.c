@@ -439,5 +439,14 @@ int main(int argc, char *argv[]) {
     free(line);
     if (!interativo)
         fclose(in);
+    /* cortesia na saida: jobs vivos viram orfaos adotados pelo init */
+    reap_jobs();
+    int ativos = 0;
+    for (int i = 0; i < njobs; i++)
+        if (jobs[i].ativo)
+            ativos++;
+    if (ativos > 0)
+        fprintf(stderr, "aviso: %d job(s) em background ainda rodando "
+                        "(continuam apos o exit, adotados pelo init)\n", ativos);
     return 0;
 }

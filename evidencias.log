@@ -445,3 +445,37 @@ OK: t6_sem_exit
 status: 0
 
 Script done on 2026-08-24 19:41:36-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-08-24 20:21:27-03:00 [COMMAND="bash /mnt/c/Users/PC/AppData/Local/Temp/claude/C--Users-PC-Downloads-Faculdade-InfSoftware-Implementacao01/2f481d91-5609-4c5a-9869-0874f5675e33/scratchpad/sessao16_inner.sh" <not executed on terminal>]
+Mon Aug 24 20:21:27 -03 2026
+pc
+/mnt/c/Users/PC/Downloads/Faculdade/InfSoftware/Implementacao01
+gcc -Wall -Wextra -g -o processflow processflow.c
+--- exit com job vivo: aviso + orfao adotado pelo init ---
+processflow> processflow> [1] 12952
+processflow> aviso: 1 job(s) em background ainda rodando (continuam apos o exit, adotados pelo init)
+-> processflow morreu; o sleep orfao (esperado PPID 1 ou init do WSL):
+  12952   12938 S+   /bin/sleep 3
+-> apos 3s (esperado: nenhum sleep, init colheu):
+(nenhum)
+--- validacao final completa ---
+rm -f processflow
+gcc -Wall -Wextra -g -o processflow processflow.c
+run: tarefa 'naoexiste' nao existe
+processflow: nao foi possivel executar '/bin/programa_que_nao_existe': No such file or directory
+tarefa 'ruim' terminou com codigo 127
+input: /caminho/inexistente.txt: No such file or directory
+tarefa 'ordenar' terminou com codigo 1
+wait: job 99 nao existe
+workdir: /pasta/que/nao/existe: No such file or directory
+uso: run <nome> | run sequential|parallel|pipe <tarefas...>
+uso: task <nome> <programa> [args...]
+uso: input <tarefa> <arquivo>
+comando desconhecido: comando_invalido
+make test: OK
+OK: t2_grupos
+OK: t3_redir
+OK: t5_erros
+OK: t6_sem_exit
+status final: 0
+
+Script done on 2026-08-24 20:21:45-03:00 [COMMAND_EXIT_CODE="0"]
