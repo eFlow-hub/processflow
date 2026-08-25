@@ -412,13 +412,18 @@ int main(int argc, char *argv[]) {
         interativo = 0;
     }
 
+    /* prompt so quando o stdin e um terminal de verdade: com entrada
+     * vinda de pipe/arquivo o prompt sujaria a saida (comportamento
+     * padrao de shells; exigido pelos testes oficiais interativos) */
+    int prompt = interativo && isatty(STDIN_FILENO);
+
     /* getline aloca e cresce o buffer sozinho: linha de qualquer tamanho,
      * sem a fatia silenciosa do fgets com buffer fixo */
     char *line = NULL;
     size_t cap = 0;
     for (;;) {
         reap_jobs(); /* colhe background terminado antes de cada linha */
-        if (interativo) {
+        if (prompt) {
             printf("processflow> ");
             fflush(stdout);
         }

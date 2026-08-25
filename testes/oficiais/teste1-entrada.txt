@@ -1,0 +1,4 @@
+task t1 /bin/echo primeiro
+task t2 /bin/echo segundo
+run sequential t1 t2
+exit

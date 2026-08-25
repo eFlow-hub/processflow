@@ -130,6 +130,8 @@ make test
 | 17 | S1 | `wait` sem argumento: loop de `waitpid` específico sobre a tabela de jobs (evitando `waitpid(-1)`); novo `t7_background.pf` | OK — 3 jobs coletados, tempo total 2.05s = job mais longo; `jobs` vazio depois; `make check` segue verde | | 24/08 19:09 | log 19:09:42 |
 | 18 | S1 | Trocar `fgets` (buffer fixo 1024) por `getline`; comparar binário antigo vs novo com linha de 3000 chars | OK — o antigo fatiava silenciosamente (eco truncado + resto virando "comando desconhecido" 2x); o novo processa a linha inteira; ASan confirma `free(line)` sem vazamento; `make check` verde | | 24/08 19:41 | log 19:41:29 |
 | 19 | S1 | `exit` avisando jobs ativos + prova do órfão: `start` de sleep 3 e `exit` imediato | OK — aviso impresso; o sleep sobreviveu ao processflow (adotado pelo init) e sumiu ao terminar, sem zumbi; `make clean && make && make test && make check` tudo verde | | 24/08 20:21 | log 20:21:27 |
+| 20 | S1 | Testes oficiais (`testes.tar`): saída esperada dos interativos não tem prompt → prompt condicionado a `isatty(stdin)`; integração no `make check` | Parcial: conteúdo idêntico nos 3 testes, mas `diff` acusou os três | Arquivos `-saida.txt` do professor sem newline final; nossa saída termina com `\n` (padrão Unix) | 24/08 23:44 | log 23:44:19 |
+| 21 | S1 | Normalizar o esperado no comparador (`sed -e '$a\'` acrescenta o newline final que falta) | OK — teste1, teste2 (interativos) e teste3 (batch) passam; regressão completa do `make check` verde | | 24/08 23:44 | log 23:44:45 |
 
 ---
 

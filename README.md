@@ -49,7 +49,10 @@ make check
 
 Compara a saída dos workflows determinísticos (t2, t3, t5, t6) com os arquivos
 em `testes/esperado/` via `diff` — pass/fail automático. t1 e t4 ficam de fora
-porque `ls -l` e `wc -l` variam com o conteúdo do diretório.
+porque `ls -l` e `wc -l` variam com o conteúdo do diretório. Em seguida roda os
+**testes oficiais da disciplina** (`testes/oficiais/`): teste1 e teste2
+interativos (stdin via pipe — o prompt `processflow>` só aparece quando o stdin
+é um terminal de verdade, via `isatty`) e teste3 em modo batch.
 
 ## Comandos suportados
 

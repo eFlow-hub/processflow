@@ -1,0 +1,5 @@
+task gerar /usr/bin/printf banana\nabacaxi\nmaca\n
+task ordenar /usr/bin/sort
+task copiar /bin/cat
+run pipe gerar ordenar copiar
+exit

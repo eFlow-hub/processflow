@@ -1,0 +1,12 @@
+task escrever /bin/echo linha-um
+output escrever saida.txt
+run escrever
+task adicionar /bin/echo linha-dois
+append adicionar saida.txt
+run adicionar
+task mostrar /bin/cat
+input mostrar saida.txt
+run mostrar
+linha-um
+linha-dois
+exit

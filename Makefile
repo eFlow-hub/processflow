@@ -16,5 +16,6 @@ test: processflow
 
 check: processflow
 	@bash testes/check.sh
+	@bash testes/check_oficial.sh
 
 .PHONY: clean test check
